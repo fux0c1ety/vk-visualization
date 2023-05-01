@@ -1,6 +1,6 @@
 
-chrome.browserAction.onClicked.addListener(function(activeTab) {
-	var windowUrl = chrome.extension.getURL('tab.html');
+chrome.action.onClicked.addListener(function(activeTab) {
+	var windowUrl = chrome.runtime.getURL('tab.html');
 	chrome.tabs.query({url: windowUrl}, function(tabs) {
 		if(tabs.length) {
 			//already opened, just select

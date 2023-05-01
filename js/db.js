@@ -23,7 +23,7 @@ var database = {
 	dbSize: 10 * 1024 * 1024,
 	db: null,
 	open: function() {
-		this.db = openDatabase('v_s_' + ABOUT.version, '1.0', 'database for storing app data', this.dbSize);
+		this.db = openDatabase('v_s_3', '1.0', 'database for storing app data', this.dbSize);
 	},
 	createTables: function() {
 		this.db.transaction(function(tx) {

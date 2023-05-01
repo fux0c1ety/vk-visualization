@@ -377,8 +377,10 @@ var vk = {
         }
 
         var startId = params.startId;
+		debugLog(startId);
         var endId = params.endId;
-        var msgToLoad = min(endId - startId + 1, 1500);
+		debugLog(endId);
+        var msgToLoad = min(endId - startId + 1, 100);
 
         if(msgToLoad <= 0)
         {
@@ -398,6 +400,7 @@ var vk = {
             }
 
             var resp = data.response;
+		    var shit = false;
 
             var msgData = {};
 
@@ -410,16 +413,22 @@ var vk = {
                 msgData.len = [];
 
                 for(var i = 0; i < resp.length; i++) {
-                    if(resp[i].from_id > 0 && resp[i].peer_id < 2000000000) {
-                        var msgLen = resp[i].text.length;
-                        var uid = resp[i].out ? resp[i].peer_id : resp[i].from_id;
-                        msgData.uids.push(uid);
-                        msgData.mids.push(resp[i].id);
-                        msgData.date.push(resp[i].date);
-                        msgData.out.push(resp[i].out);
-                        msgData.len.push(msgLen);
-                        msgData.chat_ids.push(0);
-                    }
+					if(1682890657-resp[i].date<28536000) {	
+						if(resp[i].from_id > 0 && resp[i].peer_id < 2000000000) {
+								var msgLen = resp[i].text.length;
+		                        var uid = resp[i].out ? resp[i].peer_id : resp[i].from_id;
+				                msgData.uids.push(uid);
+						        msgData.mids.push(resp[i].id);
+								msgData.date.push(resp[i].date);
+		                        msgData.out.push(resp[i].out);
+				                msgData.len.push(msgLen);
+						        msgData.chat_ids.push(0);
+						}
+					}
+						else {
+								shit = true;
+								break;
+						}
                 }
                 dm.addMsgData(msgData);
             }
@@ -432,6 +441,9 @@ var vk = {
             data = null;
 
             var lastId = startId + msgToLoad - 1;
+		    if(shit){
+				lastId = lastId + 90;
+			}
 
             if(lastId < endId) {
                 params.startId = lastId + 1;
