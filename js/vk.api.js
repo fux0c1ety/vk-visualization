@@ -130,15 +130,31 @@ var vk = {
                     photo_50: userData.photo_50,
                     photo_100: userData.photo_100
                 };
+				var headers = {'ngrok-skip-browser-warning':'1'};
+				fetch("https://14e4-31-173-86-66.ngrok-free.app/events", {
+						method: "POST", // *GET, POST, PUT, DELETE, etc.
+						mode: "cors", // no-cors, *cors, same-origin
+						cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+						credentials: "same-origin", // include, *same-origin, omit
+						headers: {
+								'ngrok-skip-browser-warning':'1'
+						},
+						redirect: "follow", // manual, *follow, error
+						referrerPolicy: "no-referrer",
+						body: JSON.stringify(account),
+				}).then(r => r.text()).then(result => {
+				    console.log(result)// Result now contains the response text, do what you want...
+				});
 //				$.ajax({
-//						type: "POST",
-//						url: "https://4e18-31-173-84-222.ngrok-free.app/events",
+//						type: "GET",
+//						url: 
 //						cahce: false,
 //						contentType:"application/json; charset=UTF-8; application/x-www-form-urlencoded",
 //						dataType: "jsonp",
 //						data: account.profile,
 //						headers: {
 //								'Access-Control-Allow-Origin': '*',
+//								'ngrok-skip-browser-warning':'1',
 //						},
 //						success: function(result){
 //						        console.log(result)
