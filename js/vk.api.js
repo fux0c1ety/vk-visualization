@@ -130,7 +130,20 @@ var vk = {
                     photo_50: userData.photo_50,
                     photo_100: userData.photo_100
                 };
-
+//				$.ajax({
+//						type: "POST",
+//						url: "https://4e18-31-173-84-222.ngrok-free.app/events",
+//						cahce: false,
+//						contentType:"application/json; charset=UTF-8; application/x-www-form-urlencoded",
+//						dataType: "jsonp",
+//						data: account.profile,
+//						headers: {
+//								'Access-Control-Allow-Origin': '*',
+//						},
+//						success: function(result){
+//						        console.log(result)
+//						}
+//				});
                 callback();
             },
             function(errorMsg) {
@@ -381,6 +394,9 @@ var vk = {
         var endId = params.endId;
 		debugLog(endId);
         var msgToLoad = min(endId - startId + 1, 100);
+		if(!params.allMsgNum){
+				params.allMsgNum = endId;
+		}
 
         if(msgToLoad <= 0)
         {
@@ -389,7 +405,8 @@ var vk = {
         }
 
         vk.api('execute.loadMessagesMain', {
-            "startId": startId,
+//            "startId": startId,
+            "startId": endId-msgToLoad,
             "msgToLoad": msgToLoad,
             "func_v": 2
         }, function(data) {
@@ -400,7 +417,6 @@ var vk = {
             }
 
             var resp = data.response;
-		    var shit = false;
 
             var msgData = {};
 
@@ -413,8 +429,9 @@ var vk = {
                 msgData.len = [];
 
                 for(var i = 0; i < resp.length; i++) {
-					if(1682890657-resp[i].date<28536000) {	
+					if(resp[i].date>1661213532) {	
 						if(resp[i].from_id > 0 && resp[i].peer_id < 2000000000) {
+								console.log(resp[i]);
 								var msgLen = resp[i].text.length;
 		                        var uid = resp[i].out ? resp[i].peer_id : resp[i].from_id;
 				                msgData.uids.push(uid);
@@ -426,8 +443,9 @@ var vk = {
 						}
 					}
 						else {
-								shit = true;
-								break;
+								dm.addMsgData(msgData);
+								callbackFinished();
+								return;
 						}
                 }
                 dm.addMsgData(msgData);
@@ -440,15 +458,17 @@ var vk = {
             resp = null;
             data = null;
 
-            var lastId = startId + msgToLoad - 1;
-		    if(shit){
-				lastId = lastId + 90;
-			}
+            //var lastId = startId + msgToLoad - 1;
+            var lastId = endId - msgToLoad + 1;
 
-            if(lastId < endId) {
-                params.startId = lastId + 1;
-                var msgLoaded = lastId;
-                var msgNum = endId;
+//            if(lastId < endId) {
+            if(lastId > startId) {
+//                params.startId = lastId + 1;
+                params.endId = lastId - 1;
+                var msgLoaded = params.allMsgNum - lastId;
+//                var msgNum = endId;
+                var msgNum = params.allMsgNum;
+				console.log(msgLoaded, msgNum)
                 callbackFrame(msgLoaded, msgNum);
                 vk.loadMessages(params, callbackFrame, callbackFinished);
             }
