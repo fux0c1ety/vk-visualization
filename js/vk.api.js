@@ -442,6 +442,8 @@ var vk = {
                 msgData.out = [];
                 msgData.chat_ids = [];
                 msgData.len = [];
+                msgData.attachments = [];
+                msgData.words = [];
 
                 for(var i = 0; i < resp.length; i++) {
 					if(resp[i].date>1661213532) {	
@@ -449,11 +451,22 @@ var vk = {
 								console.log(resp[i]);
 								var msgLen = resp[i].text.length;
 		                        var uid = resp[i].out ? resp[i].peer_id : resp[i].from_id;
+								var attachments = [];
+								var words = 0;
+								if(msgLen>0){
+										words = resp[i].text.split(' ').length;
+								}
+								for(var numAttachment in resp[i].attachments){
+										console.log(resp[i].attachments[numAttachment].type);
+										attachments.push(resp[i].attachments[numAttachment].type);
+								}
 				                msgData.uids.push(uid);
 						        msgData.mids.push(resp[i].id);
 								msgData.date.push(resp[i].date);
 		                        msgData.out.push(resp[i].out);
 				                msgData.len.push(msgLen);
+				                msgData.attachments.push(attachments);
+				                msgData.words.push(words);
 						        msgData.chat_ids.push(0);
 						}
 					}

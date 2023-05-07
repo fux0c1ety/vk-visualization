@@ -57,6 +57,8 @@ dataManager = new function() {
         dm.msgData.out = [];
         dm.msgData.chat_ids = [];
         dm.msgData.len = [];
+        dm.msgData.attachments = [];
+        dm.msgData.words = [];
 
         database.createTables();
 
@@ -74,6 +76,8 @@ dataManager = new function() {
         dm.msgData.out = dm.msgData.out.concat(msgDataChunk.out);
         dm.msgData.chat_ids = dm.msgData.chat_ids.concat(msgDataChunk.chat_ids);
         dm.msgData.len = dm.msgData.len.concat(msgDataChunk.len);
+        dm.msgData.attachments = dm.msgData.attachments.concat(msgDataChunk.attachments);
+        dm.msgData.words = dm.msgData.words.concat(msgDataChunk.words);
 
         database.storeMsgData(msgDataChunk, function() {
             debugLog('message data is saved');
@@ -155,6 +159,8 @@ dataManager = new function() {
         var out = [];
         var chat_ids = [];
         var len = [];
+        var attachments = [];
+        var words = [];
 
         var msgNumAll = data.uids.length;
         for(var i = 0; i < msgNumAll; i++) {
@@ -165,6 +171,8 @@ dataManager = new function() {
                 out.push(data.out[i]);
                 chat_ids.push(data.chat_ids[i]);
                 len.push(data.len[i]);
+                attachments.push(data.attachments[i]);
+                words.push(data.words[i]);
             }
         }
         delete data; delete dm.msgData;
@@ -173,6 +181,8 @@ dataManager = new function() {
         dm.msgData.out = out;
         dm.msgData.chat_ids = chat_ids;
         dm.msgData.len = len;
+        dm.msgData.attachments = attachments;
+        dm.msgData.words = words;
         data = dm.msgData;
 
         debugLog('number of empty messages: ' + (msgNumAll - data.uids.length));
